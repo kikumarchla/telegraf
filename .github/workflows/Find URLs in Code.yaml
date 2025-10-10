@@ -20,19 +20,20 @@ jobs:
 
     - name: Search for URLs with filenames
       run: |
+        run: |
         echo "Scanning for URLs..."
         echo "=== HTTP/HTTPS URLs ===" > temp/urls_with_files.txt
         grep -rEn "(http|https)://[^\s\"']+" . --exclude-dir=temp \
           | grep -v -i github \
           | grep -v -Ei "localhost|127\.0\.0\.1" \
-          | grep -v -E "\.md$" \
+          | grep -v -E "^\./.*\.md:" \
           | tee -a temp/urls_with_files.txt
 
         echo -e "\n=== URLs in curl commands ===" >> temp/urls_with_files.txt
         grep -rEn "curl\s+['\"]?(http[s]?://[^'\" \t\n]+)" . --exclude-dir=temp \
           | grep -v -i github \
           | grep -v -Ei "localhost|127\.0\.0\.1" \
-          | grep -v -E "\.md$" \
+          | grep -v -E "^\./.*\.md:" \
           | tee -a temp/urls_with_files.txt
 
     - name: Show found URLs with source files
